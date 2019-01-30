@@ -854,13 +854,14 @@ See also: ansi(), valid(), colorstyle
   By default the comparison is a case-sensitive lexicographic (string) comparison. By giving the optional <type>, the comparison can be specified:
 
       <type>            Comparison
-        A               Maybe case-sensitive lexicographic (default)
-        I               Always case-insensitive lexicographic
+        A (Default)     Maybe case-sensitive lexicographic (Using server locale settings.)
+        L               Always case-sensitive lexicographic
+        I               Always case-insensitive lexicographic (Using server locale settings)
         D               Dbrefs of valid objects
         N               Integers
         F               Floating point numbers
 
-  Whether or not the a sort type is case-sensitive or not depends on the particular MUSH and its environment.
+  Whether or not the A sort type is case-sensitive or not depends on the particular MUSH and its environment.
 See also: strmatch(), eq()
 & CON()
   con(<object>)
@@ -3884,16 +3885,17 @@ See also: anonymous attributes, sorting, sortby()
 
   Type    Sorts:
    a       Sorts lexicographically (Maybe case-sensitive).
+   l       Sorts lexicographically (Always case-sensitive).
    i       Sorts lexicographically (Always case-insensitive).
    d       Sorts dbrefs.
    n       Sorts integer numbers.
    f       Sorts decimal numbers.
    m       Sorts strings with embedded numbers and dbrefs (as names).
-   lattr   Sorts attribute names.
+   lattr   Sorts like attribute names.
 
   Prefixing the sort type with a minus sign, -, reverses the order of the sort.
 
-  Whether or not the 'a' sort type is case-sensitive or not depends on the particular mush and its environment.
+  Whether or not the 'a' sort type is case-sensitive or not depends on the particular mush and its environment. For the technically included, it uses the server's locale settings and the C strcoll() function. The 'l' type uses the C strcmp() function and ignores locale.
 
   Passing incompatible values to a given sort type (For example, dbrefs when you're saying to sort numbers) can produce unpredictable results.
 
@@ -3901,8 +3903,7 @@ Continued in HELP SORTING2
 & SORTING2
    The following sort types are deprecated; new code should use sortkey() instead:
 
-   name    Sorts dbrefs by their
-   names. (Maybe case-sensitive)
+   name    Sorts dbrefs by their names. (Maybe case-sensitive)
    namei   Sorts dbrefs by their names. (Always case-insensitive)
    conn    Sorts dbrefs by their connection time.
    idle    Sorts dbrefs by their idle time.

@@ -4,7 +4,6 @@
  */
 
 #include "copyrite.h"
-#include "sort.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -18,6 +17,7 @@
 #include "notify.h"
 #include "parse.h"
 #include "strutil.h"
+#include "sort.h"
 
 #define EPSILON 0.000000001 /**< limit of precision for float equality */
 
@@ -488,6 +488,16 @@ s_comp(const void *s1, const void *s2)
 }
 
 static int
+lex_comp(const void *s1, const void *s2)
+{
+  const s_rec *sr1 = (const s_rec *) s1;
+  const s_rec *sr2 = (const s_rec *) s2;
+  int res = 0;
+  res = strcmp(sr1->memo.str.s, sr2->memo.str.s);
+  return Compare(res, sr1, sr2) * sort_order;
+}
+
+static int
 m_comp(const void *s1, const void *s2)
 {
   const s_rec *sr1 = (const s_rec *) s1;
@@ -548,7 +558,7 @@ compare_attr_names(const char *attr1, const char *attr2)
       branches2++;
       *(next2)++ = '\0';
     }
-    cmp = strcoll(a1, a2);
+    cmp = strcmp(a1, a2); /* Match attrib.c sorting */
     if (cmp != 0) {
       /* Current branch differs */
       return (cmp < 0 ? -1 : 1);
@@ -594,6 +604,7 @@ f_comp(const void *s1, const void *s2)
 #define IS_CASE_INSENS 0x4U
 
 const char ALPHANUM_LIST[] = "A";
+const char LEXICOGRAPHIC_LIST[] = "L";
 const char INSENS_ALPHANUM_LIST[] = "I";
 const char DBREF_LIST[] = "D";
 const char NUMERIC_LIST[] = "N";
@@ -615,6 +626,7 @@ const char *const UNKNOWN_LIST = NULL;
 ListTypeInfo ltypelist[] = {
   /* List type name,            recordmaker,    comparer, dbrefs? */
   {ALPHANUM_LIST, NULL, 0, gen_alphanum, s_comp, IS_STRING},
+  {LEXICOGRAPHIC_LIST, NULL, 0, gen_alphanum, lex_comp, IS_STRING},
   {INSENS_ALPHANUM_LIST, NULL, 0, gen_alphanum, s_comp,
    IS_STRING | IS_CASE_INSENS},
   {DBREF_LIST, NULL, 0, gen_dbref, i_comp, 0},

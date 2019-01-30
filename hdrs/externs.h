@@ -548,6 +548,7 @@ bool qcomp_regexp_match(const pcre2_code *re, pcre2_match_data *md,
 /** Types of lists */
 
 extern const char ALPHANUM_LIST[];
+extern const char LEXICOGRAPHIC_LIST[];
 extern const char INSENS_ALPHANUM_LIST[];
 extern const char DBREF_LIST[];
 extern const char NUMERIC_LIST[];

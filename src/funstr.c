@@ -460,18 +460,18 @@ FUNCTION(fun_comp)
   }
 
   switch (type) {
-  case 'A': /* Case-sensitive lexicographic */
-  {
+  case 'A': /* Locale-specific lexicographic using strcoll() */
     safe_integer(comp_gencomp(executor, args[0], args[1], ALPHANUM_LIST), buff,
                  bp);
     return;
-  }
+  case 'L': /* Lexicographic using strcmp() */
+    safe_integer(comp_gencomp(executor, args[0], args[1], LEXICOGRAPHIC_LIST),
+                 buff, bp);
+    return;
   case 'I': /* Case-insensitive lexicographic */
-  {
     safe_integer(comp_gencomp(executor, args[0], args[1], INSENS_ALPHANUM_LIST),
                  buff, bp);
     return;
-  }
   case 'N': /* Integers */
     if (!is_strict_integer(args[0]) || !is_strict_integer(args[1])) {
       safe_str(T(e_ints), buff, bp);
